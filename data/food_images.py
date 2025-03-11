@@ -6,7 +6,7 @@ from io import BytesIO
 
 # Load dataset
 # Get the directory of the script
-script_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = os.path.dirname(os.path.abspath(__file__)) #added his so it can detect in the same folder 
 
 # Construct the relative path
 file_path = os.path.join(script_dir, "food_data.csv")
@@ -14,7 +14,7 @@ file_path = os.path.join(script_dir, "food_data.csv")
 # Load dataset
 df = pd.read_csv(file_path)
 
-# Directory to save images
+# added to food_images folder.
 save_dir = "food_images"
 os.makedirs(save_dir, exist_ok=True)
 
@@ -36,6 +36,6 @@ def download_image(url, food_name, image_id):
 
 # Download images
 for _, row in df.iterrows():
-    download_image(row['image'], row['name'], row['id'])
+    download_image(row['image'], row['name'], row['id']) #for the program to read the csv to diffrentiate images.
 
 print("Image download complete!")

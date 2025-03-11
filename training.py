@@ -6,13 +6,12 @@ import torch.optim as optim
 from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader
 
-# Set device
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Directories
 data_dir = "food_images"  # Update this if needed
 
-# Function to remove empty folders
+
 def remove_empty_folders(root_dir):
     for class_name in os.listdir(root_dir):
         class_path = os.path.join(root_dir, class_name)
