@@ -1,6 +1,2 @@
 # food-analyzer
-A Program that can help how much nutrition you will consume.
-
-food_classifier.pth (trained model)
-food_images (images from food_data.csv)
-filtered_food_images (clean data)
+Research Project comparing 2 algorithm betweeen YOLO and CNN, in this research we use Pytorch Library (CNN), while we use YOLO V8 for the YOLO. 
