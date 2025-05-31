@@ -5,18 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indonesian Food Classifier</title>
     <link rel="stylesheet" href="style.css">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
 </head>
 <body>
     <h1>Indonesian Food Classifier</h1>
 
     <form method="POST" enctype="multipart/form-data">
         <label for="image">Upload Image:</label><br>
-        <input type="file" name="image" accept="image/*" required>
+        <input type="file" name="image" id="imageInput" accept="image/*" required>
         <button type="submit">Classify</button>
+        <img id="preview" src="#" alt="Image Preview" style="max-width: 300px; display: none;">
+    <br>
     </form>
 
     {% if prediction %}
-        <h2>Prediction: {{ prediction }}</h2>
+        <h2>Food type: {{ prediction }}</h2>
 
         {% if nutrition %}
             <h3>Nutritional Information</h3>
@@ -27,12 +31,12 @@
                 <li><strong>Carbohydrates:</strong> {{ nutrition.carbohydrates }} g</li>
             </ul>
         {% else %}
-            <p>No nutritional information available for this food.</p>
+            <p>No nutritional information available for this food.</p> <!--!incase the image is invalid or not recognized!-->
         {% endif %}
     {% else %}
         <p>Upload an image to classify.</p>
     {% endif %}
 
-    <script src="script.js"></script>
+  
 </body>
 </html>

@@ -3,16 +3,15 @@ import torch
 from torch import nn
 from torchvision import models, transforms
 from PIL import Image
+from nutrition import nutrition_data
+from label import labels  
+
 
 # Initialize Flask app
 app = Flask(__name__)
 
 # Classes 
-labels = [
-    'Ayam Goreng', 'Burger', 'French Fries', 'Gado-Gado', 'Ikan Goreng',
-    'Mie Goreng', 'Nasi Goreng', 'Nasi Padang', 'Pizza',
-    'Rawon', 'Rendang', 'Sate', 'Soto'
-]
+# labels = []
 
 # Define image transformation
 transform = transforms.Compose([
@@ -35,6 +34,7 @@ model = load_model()
 @app.route('/', methods=['GET', 'POST'])
 def index():
     prediction = None
+    nutrition_info = None
 
     if request.method == 'POST':
         file = request.files['image']
@@ -48,10 +48,13 @@ def index():
 
             if predicted_idx < len(labels):
                 prediction = labels[predicted_idx]
+                nutrition_info = nutrition_data.get(prediction, None)
             else:
                 prediction = "Unknown"
+                nutrition_info = None
 
-    return render_template('index.html', prediction=prediction)
+    return render_template('index.html', prediction=prediction, nutrition=nutrition_info)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
