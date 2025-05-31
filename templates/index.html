@@ -3,31 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Classifier</title>
+    <title>Indonesian Food Classifier</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Food Classification and Nutritional Information</h1>
+    <h1>Indonesian Food Classifier</h1>
+
     <form method="POST" enctype="multipart/form-data">
-        <label for="image">Upload Image</label>
+        <label for="image">Upload Image:</label><br>
         <input type="file" name="image" accept="image/*" required>
         <button type="submit">Classify</button>
     </form>
 
     {% if prediction %}
-    <h2>Prediction: {{ prediction }}</h2>
-    {% if nutrition %}
-    <h3>Nutritional Information:</h3>
-    <ul>
-        <li>Calories: {{ nutrition.calories }} kcal</li>
-        <li>Proteins: {{ nutrition.proteins }} g</li>
-        <li>Fat: {{ nutrition.fat }} g</li>
-        <li>Carbohydrates: {{ nutrition.carbohydrates }} g</li>
-    </ul>
+        <h2>Prediction: {{ prediction }}</h2>
+
+        {% if nutrition %}
+            <h3>Nutritional Information</h3>
+            <ul>
+                <li><strong>Calories:</strong> {{ nutrition.calories }} kcal</li>
+                <li><strong>Proteins:</strong> {{ nutrition.proteins }} g</li>
+                <li><strong>Fat:</strong> {{ nutrition.fat }} g</li>
+                <li><strong>Carbohydrates:</strong> {{ nutrition.carbohydrates }} g</li>
+            </ul>
+        {% else %}
+            <p>No nutritional information available for this food.</p>
+        {% endif %}
     {% else %}
-    <p>No nutritional information available for this food.</p>
+        <p>Upload an image to classify.</p>
     {% endif %}
-    {% else %}
-    <p>Upload an image to classify.</p>
-    {% endif %}
+
+    <script src="script.js"></script>
 </body>
 </html>
