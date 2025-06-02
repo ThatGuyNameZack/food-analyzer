@@ -1,43 +1,65 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request
 from ultralytics import YOLO
 import cv2
 import os
 import uuid
+from nutrition import nutrition_data
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Load your YOLOv8 model
+# Load YOLOv8 model
 model = YOLO('Hasil Training/weights/best.pt')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    result_image = None
+    detected_items = []
+    nutrition_results = []
+
     if request.method == 'POST':
-        # Check if file was uploaded
-        if 'image' not in request.files:
-            return 'No file part'
         file = request.files['image']
         if file.filename == '':
             return 'No selected file'
 
-        # Save the uploaded image
-        unique_filename = f"{uuid.uuid4().hex}.jpg"
-        filepath = os.path.join(UPLOAD_FOLDER, unique_filename)
+        # Save uploaded file
+        filename = f"{uuid.uuid4().hex}.jpg"
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
 
-        # Read and run YOLOv8 inference
-        frame = cv2.imread(filepath)
-        results = model(frame)
-        annotated_frame = results[0].plot()
+        # Run YOLO on image
+        image = cv2.imread(filepath)
+        results = model(image)[0]
+        annotated = results.plot()
 
-        # Save the annotated image
-        result_path = os.path.join(UPLOAD_FOLDER, f"result_{unique_filename}")
-        cv2.imwrite(result_path, annotated_frame)
+        # Save annotated image
+        result_filename = f"result_{filename}"
+        result_path = os.path.join(UPLOAD_FOLDER, result_filename)
+        cv2.imwrite(result_path, annotated)
 
-        return render_template('index.html', result_image=result_path)
+        # Get detected class names
+        for box in results.boxes:
+            cls_id = int(box.cls[0].item())
+            label = model.names[cls_id]
+            if label not in detected_items:
+                detected_items.append(label)
 
-    return render_template('index.html', result_image=None)
+        # Match with nutrition data
+        for item in detected_items:
+            if item in nutrition_data:
+                nutrition_results.append({
+                    'name': item,
+                    **nutrition_data[item]
+                })
+            else:
+                nutrition_results.append({'name': item, 'note': 'No data available'})
+
+        result_image = result_filename
+
+    return render_template('index.html',
+                           result_image=result_image,
+                           nutrition_list=nutrition_results)
 
 if __name__ == '__main__':
     app.run(debug=True)
