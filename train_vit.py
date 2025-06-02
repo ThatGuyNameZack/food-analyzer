@@ -41,7 +41,6 @@ model = model.to(DEVICE)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
-# Training Function
 def train():
     print("Starting training...")
     for epoch in range(NUM_EPOCHS):
@@ -50,6 +49,7 @@ def train():
         correct = 0
         total = 0
 
+        print(f"\nEpoch {epoch+1}/{NUM_EPOCHS}")
         for batch_idx, (images, labels) in enumerate(train_loader):
             images, labels = images.to(DEVICE), labels.to(DEVICE)
 
@@ -64,12 +64,19 @@ def train():
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+            # Batch-level logging
+            if (batch_idx + 1) % 5 == 0 or (batch_idx + 1) == len(train_loader):
+                print(f"  Batch [{batch_idx+1}/{len(train_loader)}]  Loss: {loss.item():.4f}")
+
+        # Epoch-level summary
         epoch_loss = running_loss / len(train_loader)
         accuracy = 100 * correct / total
-        print(f"Epoch [{epoch+1}/{NUM_EPOCHS}], Loss: {epoch_loss:.4f}, Accuracy: {accuracy:.2f}%")
+        print(f"Epoch [{epoch+1}/{NUM_EPOCHS}] complete — Loss: {epoch_loss:.4f}, Accuracy: {accuracy:.2f}%")
 
+    # Save the model
     torch.save(model.state_dict(), "indonesia_food_vit.pth")
-    print("Training complete. Model saved.")
+    print("✅ Training complete. Model saved to indonesia_food_vit.pth.")
+
 
 if __name__ == '__main__':
     train()
