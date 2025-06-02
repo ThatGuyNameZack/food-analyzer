@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 13
+names: ['Ayam Geprek', 'Bakso', 'Bakwan', 'Bakwan2', 'Bubur Ayam', 'Cireng', 'Ketoprak', 'Klepon', 'Mie Ayam', 'Nasi Kuning', 'Rawon', 'Soto', 'Tahu']
+
+roboflow:
+  workspace: tristan-2bilf
+  project: tugas-besar-siscer-cgu06
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/tristan-2bilf/tugas-besar-siscer-cgu06/dataset/1
