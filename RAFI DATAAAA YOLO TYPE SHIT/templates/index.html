@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YOLOv8 Food Detection + Nutrition</title>
+</head>
+<body>
+    <h1>Upload Food Image</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit">Detect</button>
+    </form>
+
+    {% if result_image %}
+        <h2>Detection Result:</h2>
+        <img src="{{ url_for('static', filename='uploads/' + result_image) }}" style="max-width: 500px;">
+
+        <h2>Nutrition Info:</h2>
+        <ul>
+            {% for item in nutrition_list %}
+                <li>
+                    <strong>{{ item.name }}</strong><br>
+                    {% if item.note %}
+                        {{ item.note }}
+                    {% else %}
+                        Calories: {{ item.calories }} kcal<br>
+                        Proteins: {{ item.proteins }} g<br>
+                        Fat: {{ item.fat }} g<br>
+                        Carbohydrates: {{ item.carbohydrates }} g
+                    {% endif %}
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
