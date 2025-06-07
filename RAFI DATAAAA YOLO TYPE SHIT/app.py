@@ -10,7 +10,7 @@ UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Load YOLOv8 model
-model = YOLO('train61/weights/best.pt')
+model = YOLO('train64/weights/best.pt')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
